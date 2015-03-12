@@ -4,7 +4,7 @@ clc;
 fps = 6000; %frame rate
 scale = 11/0.3; % pixels/mm
 
-for i=1:21
+for i=1:30
     images(:,:,:,i) = imread(sprintf('side%04d.jpg',i));
 end
 
@@ -31,20 +31,18 @@ for k = 1:numframes
     area_vector = [s.Area];
     [tmp, idx] = max(area_vector);
     
-    box(k, :) = floor(s(idx).BoundingBox);
+    %box(k, :) = floor(s(idx).BoundingBox);
     centroids(k, :) = s(idx).Centroid;
     perimeter(k, :) = s(idx).Perimeter;
     minor(k, :) = s(idx).MinorAxisLength;
     major(k, :) = s(idx).MajorAxisLength;
     convex(k,:) = s(idx).ConvexArea;
 end
+width = 16;
 
 for k=1:numframes
-    for i = box(k,1) : box(k,1)+box(k,3)
-        for j = box(k,2) : box(k,2)+box(k,4)
-            [I(k),Imax(k)] = circularHough(img_num(:,:,k), i, j, 15, 25);
-        end
-    end
+    box(k,:) = uint8([centroids(k,1)-width/2, centroids(k,2)-width/2, width, width]);
+    [X(k),Y(k),radius(k),gauss] = circularHough(img_num(:,:,k), box(k,:), 18, 25);
 end
 
 %rectangle('Position',[centroids(10,1)-8,centroids(10,2)-8,20,20],'EdgeColor','b')
