@@ -1,7 +1,5 @@
 function [finalX, finalY, radius, gauss] = circularHough(image, box, rmin, rmax)
 
-
-
 for i = box(1) : box(1)+box(3)
     for j = box(2) : box(2)+box(4)
         k = 1;
@@ -11,13 +9,16 @@ for i = box(1) : box(1)+box(3)
                 p = abs(floor( i + r * cos(th) ));
                 q = abs(floor( j + r * sin(th) ));
                 %c = (p-i)^2+(q-j)^2;
-                if p == 0
-                    p = 1;
-                end
-                if q == 0
-                    q = 1;
-                end
-                intensity = [intensity;image(p,q)];
+                %if p == 0
+                    %p = 1;
+                %end
+                %if q == 0
+                %    q = 1;
+                %end
+                %if q > 400
+                %    q = 400;
+                %end
+                intensity = [intensity;image(q,p)];
             end
             I(k) = mean(intensity);
             k = k+1;
